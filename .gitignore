@@ -1,0 +1,21 @@
+# Generated skill outputs — runtime artifacts, and they embed third-party
+# product images / thumbnails we don't want to redistribute in a public repo.
+# The skills themselves are tracked; the reports they produce are not.
+**/product-research/
+**/hike-routes/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node (only if a skill ever adds tooling)
+node_modules/
