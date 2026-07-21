@@ -19,3 +19,6 @@ venv/
 
 # Node (only if a skill ever adds tooling)
 node_modules/
+
+# Private working notes — backed up locally, never public
+Product Research Skill/project.md
