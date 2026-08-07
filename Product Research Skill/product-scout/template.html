@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{CATEGORY}} — buying report</title>
+<!-- Tab icon. Replace {{FAVICON_EMOJI}} with one emoji; leave the encoding as-is (a raw < or space here fails to decode). -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%3E{{FAVICON_EMOJI}}%3C/text%3E%3C/svg%3E">
+<style>
+/* ============================================================
+   PRODUCT SCOUT — house style
+   Cool paper, seal gold, one inverted panel for the answer.
+   Every figure is mono + tabular-nums so columns align.
+   ============================================================ */
+
+:root{
+  --ground:#F3F4F6; --surface:#FFFFFF; --sunk:#EAECF0;
+  --ink:#16181D; --ink-soft:#5A6072; --ink-faint:#8A90A0;
+  --line:#DFE2E8;
+  --panel:#1C2028; --panel-ink:#F2F3F5; --panel-soft:#A7AEBC; --panel-line:#343A45;
+  --gold:#B4801A; --gold-text:#8A6010; --gold-soft:#F5EAD2;
+  --clay:#A8564A;
+  --radius:10px;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono","Segoe UI Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#14161A; --surface:#1C1F25; --sunk:#22262D;
+    --ink:#E8E9EC; --ink-soft:#9AA0AE; --ink-faint:#767D8B;
+    --line:#2B2F37;
+    --panel:#242932; --panel-ink:#F2F3F5; --panel-soft:#A7AEBC; --panel-line:#39404B;
+    --gold:#E0A93F; --gold-text:#E0A93F; --gold-soft:#332913;
+    --clay:#D08878;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#14161A; --surface:#1C1F25; --sunk:#22262D;
+  --ink:#E8E9EC; --ink-soft:#9AA0AE; --ink-faint:#767D8B;
+  --line:#2B2F37;
+  --panel:#242932; --panel-ink:#F2F3F5; --panel-soft:#A7AEBC; --panel-line:#39404B;
+  --gold:#E0A93F; --gold-text:#E0A93F; --gold-soft:#332913;
+  --clay:#D08878;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--sans); font-size:17px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px; margin:0 auto; padding:40px 22px 80px}
+a{color:var(--gold-text); text-decoration-thickness:1px; text-underline-offset:2px}
+a:focus-visible{outline:2px solid var(--gold); outline-offset:3px; border-radius:3px}
+
+/* --- shared type roles --- */
+.eyebrow{
+  font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-faint); margin:0;
+}
+.num{font-family:var(--mono); font-variant-numeric:tabular-nums}
+.section-head{
+  font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-faint); margin:0 0 14px; padding-bottom:8px; border-bottom:1px solid var(--line);
+}
+
+/* --- masthead --- */
+.masthead{margin-bottom:26px}
+.masthead .title{
+  font-size:15px; font-weight:600; letter-spacing:-.01em; margin:6px 0 0; color:var(--ink-soft);
+}
+
+/* --- THE PICK: the one loud element --- */
+.verdict{
+  background:var(--panel); color:var(--panel-ink); border-radius:var(--radius);
+  padding:26px 26px 24px; margin-bottom:38px;
+}
+@media (prefers-reduced-motion:no-preference){
+  .verdict{animation:rise .5s ease both}
+  @keyframes rise{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+}
+.verdict-tag{
+  display:inline-block; font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--gold); border-bottom:2px solid var(--gold);
+  padding-bottom:4px; margin-bottom:16px;
+}
+.verdict-body{display:flex; gap:22px; align-items:flex-start}
+.verdict-main{flex:1; min-width:0}
+.verdict-name{
+  font-size:clamp(28px,6vw,40px); font-weight:700; letter-spacing:-.03em; line-height:1.08;
+  margin:0 0 10px;
+}
+.verdict-fit{
+  font-size:18px; font-weight:600; letter-spacing:-.01em; color:var(--gold);
+  margin:0 0 10px; line-height:1.35;
+}
+.verdict-why{color:var(--panel-soft); margin:0 0 18px; font-size:16px}
+.verdict-facts{
+  font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:13px;
+  color:var(--panel-soft); border-top:1px solid var(--panel-line); padding-top:14px; margin-bottom:18px;
+}
+.verdict-facts strong{color:var(--gold); font-weight:600; font-size:16px}
+.verdict-shot{
+  width:150px; height:150px; flex:none; border-radius:6px; background:var(--panel-line);
+  display:block; object-fit:contain;
+}
+.buy{
+  display:inline-block; background:var(--gold); color:#16181D; text-decoration:none;
+  font-weight:650; font-size:15px; padding:11px 20px; border-radius:6px;
+}
+.buy:hover{filter:brightness(1.08)}
+.buy:focus-visible{outline:2px solid var(--panel-ink); outline-offset:3px}
+
+/* --- ALTERNATES: the "Best if you…" line leads --- */
+.alts{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:38px}
+.alt{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+  padding:20px; display:flex; flex-direction:column;
+}
+.alt:hover{border-color:var(--gold)}
+.alt-fit{
+  font-size:19px; font-weight:600; letter-spacing:-.015em; line-height:1.3; margin:0 0 14px;
+  padding-top:12px; border-top:2px solid var(--gold);
+}
+.alt-name{
+  font-family:var(--mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 4px;
+}
+.alt-price{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:15px; color:var(--gold-text); font-weight:600; margin:0 0 14px}
+.alt-shot{
+  width:100%; height:150px; object-fit:contain; border-radius:6px; background:var(--sunk);
+  margin-bottom:14px; display:block;
+}
+.points{list-style:none; margin:0 0 14px; padding:0; font-size:15px}
+.points li{padding-left:20px; position:relative; margin-bottom:6px; color:var(--ink-soft)}
+.points li::before{position:absolute; left:0; font-family:var(--mono); font-weight:700}
+.points .up::before{content:"+"; color:var(--gold-text)}
+.points .down::before{content:"\2212"; color:var(--clay)}
+.alt-link{font-size:14px; font-weight:600}
+
+/* --- video card: pinned to the card foot so both alternates align --- */
+.video{
+  display:flex; gap:12px; align-items:center; text-decoration:none; color:inherit;
+  background:var(--sunk); border-radius:8px; padding:8px; margin:auto 0 14px;
+}
+.video:hover{background:var(--gold-soft)}
+.verdict .video{background:var(--panel-line); color:var(--panel-ink); max-width:300px; margin:16px 0 0}
+.verdict .video:hover{background:#3B424E}
+.verdict .video-sub{color:var(--panel-soft)}
+.video img{width:88px; height:50px; object-fit:cover; border-radius:4px; flex:none; background:var(--line)}
+.video-meta{min-width:0}
+.video-ch{font-size:13px; font-weight:600; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.video-sub{font-family:var(--mono); font-size:11px; color:var(--ink-faint); font-variant-numeric:tabular-nums}
+
+/* --- sections --- */
+.block{margin-bottom:38px}
+.brief{list-style:none; margin:0; padding:0; font-size:15px}
+.brief li{display:flex; gap:12px; padding:7px 0; border-bottom:1px solid var(--line)}
+.brief li:last-child{border-bottom:0}
+.brief .k{
+  font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-faint); flex:none; width:110px; padding-top:3px;
+}
+.brief .v{color:var(--ink-soft)}
+
+.scroller{overflow-x:auto; -webkit-overflow-scrolling:touch}
+table{border-collapse:collapse; width:100%; font-size:14px; min-width:520px}
+th,td{text-align:left; padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top}
+th{
+  font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink-faint); font-weight:500; white-space:nowrap;
+}
+td{color:var(--ink-soft)}
+td:first-child{color:var(--ink); font-weight:600; white-space:nowrap}
+.cell-num{font-family:var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap}
+.yes{color:var(--gold-text); font-weight:600}
+.no{color:var(--clay)}
+.row-pick td{background:var(--gold-soft)}
+
+.out{list-style:none; margin:0; padding:0; font-size:15px}
+.out li{padding:8px 0; border-bottom:1px solid var(--line); color:var(--ink-soft)}
+.out li:last-child{border-bottom:0}
+.out b{color:var(--ink); font-weight:600}
+
+.sources{font-size:14px; color:var(--ink-soft)}
+.sources h3{
+  font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-faint); margin:18px 0 6px; font-weight:500;
+}
+.sources ul{margin:0; padding-left:18px}
+.sources li{margin-bottom:4px}
+
+.footnote{
+  font-size:13px; color:var(--ink-faint); border-top:1px solid var(--line);
+  padding-top:16px; margin-top:38px;
+}
+
+@media (max-width:640px){
+  .wrap{padding:28px 18px 60px}
+  .alts{grid-template-columns:1fr}
+  .verdict-body{flex-direction:column-reverse}
+  .verdict-shot{width:100%; max-width:200px}
+  .brief li{flex-direction:column; gap:2px}
+  .brief .k{width:auto; padding-top:0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">Buying report · {{CATEGORY}} · <span class="num">{{DATE}}</span> · {{COUNTRY}}</p>
+    <p class="title">{{ONE_LINE_QUESTION}}</p>
+  </header>
+
+  <!-- ===== THE PICK — the answer, unmissable, above the fold ===== -->
+  <section class="verdict">
+    <span class="verdict-tag">The pick</span>
+    <div class="verdict-body">
+      <div class="verdict-main">
+        <h1 class="verdict-name">{{PICK_NAME}}</h1>
+        <p class="verdict-fit">Best if you {{PICK_FIT}}</p>
+        <p class="verdict-why">{{PICK_WHY}}</p>
+        <p class="verdict-facts">
+          <strong>{{PICK_PRICE}}</strong> · {{PICK_RETAILER}} · {{PICK_DELIVERY}} · checked {{PICK_PRICE_DATE}}
+        </p>
+        <a class="buy" href="{{PICK_URL}}">Buy at {{PICK_RETAILER}}</a>
+        <a class="video" href="{{PICK_VID_URL}}">
+          <img src="{{PICK_VID_THUMB}}" alt="">
+          <span class="video-meta">
+            <span class="video-ch">{{PICK_VID_CHANNEL}}</span>
+            <span class="video-sub">{{PICK_VID_STATS}}</span>
+          </span>
+        </a>
+      </div>
+      <img class="verdict-shot" src="{{PICK_IMG}}" alt="{{PICK_NAME}}">
+    </div>
+  </section>
+
+  <!-- ===== ALTERNATES — "Best if you…" leads; name is demoted ===== -->
+  <!-- REPEAT .alt exactly twice. Two alternates, no more, no fewer. -->
+  <section class="alts">
+
+    <article class="alt">
+      <p class="alt-fit">Best if you {{ALT1_FIT}}</p>
+      <img class="alt-shot" src="{{ALT1_IMG}}" alt="{{ALT1_NAME}}">
+      <p class="alt-name">{{ALT1_NAME}}</p>
+      <p class="alt-price">{{ALT1_PRICE}}</p>
+      <ul class="points">
+        <li class="up">{{ALT1_PRO}}</li>
+        <li class="down">{{ALT1_CON}}</li>
+      </ul>
+      <a class="video" href="{{ALT1_VID_URL}}">
+        <img src="{{ALT1_VID_THUMB}}" alt="">
+        <span class="video-meta">
+          <span class="video-ch">{{ALT1_VID_CHANNEL}}</span>
+          <span class="video-sub">{{ALT1_VID_STATS}}</span>
+        </span>
+      </a>
+      <a class="alt-link" href="{{ALT1_URL}}">Buy at {{ALT1_RETAILER}}</a>
+    </article>
+
+    <article class="alt">
+      <p class="alt-fit">Best if you {{ALT2_FIT}}</p>
+      <img class="alt-shot" src="{{ALT2_IMG}}" alt="{{ALT2_NAME}}">
+      <p class="alt-name">{{ALT2_NAME}}</p>
+      <p class="alt-price">{{ALT2_PRICE}}</p>
+      <ul class="points">
+        <li class="up">{{ALT2_PRO}}</li>
+        <li class="down">{{ALT2_CON}}</li>
+      </ul>
+      <a class="video" href="{{ALT2_VID_URL}}">
+        <img src="{{ALT2_VID_THUMB}}" alt="">
+        <span class="video-meta">
+          <span class="video-ch">{{ALT2_VID_CHANNEL}}</span>
+          <span class="video-sub">{{ALT2_VID_STATS}}</span>
+        </span>
+      </a>
+      <a class="alt-link" href="{{ALT2_URL}}">Buy at {{ALT2_RETAILER}}</a>
+    </article>
+
+  </section>
+
+  <!-- ===== The brief it was judged against ===== -->
+  <section class="block">
+    <h2 class="section-head">What I judged against</h2>
+    <ul class="brief">
+      <!-- REPEAT one li per confirmed brief line -->
+      <li><span class="k">{{BRIEF_KEY}}</span><span class="v">{{BRIEF_VALUE}}</span></li>
+    </ul>
+  </section>
+
+  <!-- ===== Comparison ===== -->
+  <section class="block">
+    <h2 class="section-head">Side by side</h2>
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th>Product</th><th>{{AXIS}}</th><th>Price</th></tr>
+        </thead>
+        <tbody>
+          <!-- The pick's row carries class="row-pick" -->
+          <tr class="row-pick"><td>{{NAME}}</td><td class="yes">{{VALUE}}</td><td class="cell-num">{{PRICE}}</td></tr>
+          <tr><td>{{NAME}}</td><td class="no">{{VALUE}}</td><td class="cell-num">{{PRICE}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== Where to buy ===== -->
+  <section class="block">
+    <h2 class="section-head">Where to buy</h2>
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th>Product</th><th>Retailer</th><th>Price</th><th>Delivery</th><th>Returns</th><th>Checked</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{NAME}}</td>
+            <td><a href="{{URL}}">{{RETAILER}}</a></td>
+            <td class="cell-num">{{PRICE}}</td>
+            <td class="cell-num">{{DELIVERY}}</td>
+            <td>{{RETURNS}}</td>
+            <td class="cell-num">{{DATE}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== Ruled out ===== -->
+  <section class="block">
+    <h2 class="section-head">Ruled out</h2>
+    <ul class="out">
+      <li><b>{{NAME}}</b> — {{THE_NON_NEGOTIABLE_IT_FAILED}}</li>
+    </ul>
+  </section>
+
+  <!-- ===== Sources ===== -->
+  <section class="block sources">
+    <h2 class="section-head">Sources</h2>
+    <h3>{{CANDIDATE}}</h3>
+    <ul>
+      <li><a href="{{URL}}">{{TITLE}}</a> — {{WHAT_IT_CONTRIBUTED}}</li>
+    </ul>
+  </section>
+
+  <p class="footnote">{{FOOTNOTE}}</p>
+
+</div>
+</body>
+</html>
